@@ -21,6 +21,11 @@ jobs:
     - name: Build
       run: npm run generate
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "anyavlasenko@gmail.com"
+        git config --global user.name "Anna Komarova"
+
     - name: Check if gh-pages exists
       run: |
         if [ $(git branch --list gh-pages) ]; then
