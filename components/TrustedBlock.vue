@@ -11,7 +11,7 @@ export default {
     return {
       activeCard: "marketing-section",
       title: "Trusted long-term partner",
-      text: ' We combine disruptive marketing techniques with proven tech solutions to provide maximum business value.'
+      text: " We combine disruptive marketing techniques with proven tech solutions to provide maximum business value.",
     };
   },
   mounted() {
@@ -25,19 +25,27 @@ export default {
 
     tl.from(".main-title span", {
       opacity: 0,
-      stagger: 0.1,
+      stagger: 0.05,
       duration: 1,
     })
-    .from('.text span', {
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.01
-    })
+      .from(".text span", {
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.01,
+      })
+      .from(
+        ".tagline",
+        {
+          opacity: 0,
+          duration: 0.5,
+        },
+        "-=3"
+      );
   },
   methods: {
     toggleCard(cardName) {
       if (this.activeCard === cardName) {
-        return; 
+        return;
       }
       this.activeCard = cardName;
       this.applyCardStyles();
@@ -49,24 +57,22 @@ export default {
 
       if (this.activeCard === "marketing-section") {
         const tl = gsap.timeline();
-        tl
-        .to(generation, {
-          flexBasis: "25%",
+        tl.to(generation, {
+          flexBasis: "66%",
           opacity: 0.5,
           xPercent: 0,
           duration: 0.5,
-        })
-        .to(marketing, { opacity: 1, duration: 0.2 })
+        }).to(marketing, { opacity: 1, duration: 0.2 });
       } else {
         gsap.to(marketing, { opacity: 0.5, duration: 0.5 });
         gsap.to(generation, {
-          flexBasis: "75%",
+          flexBasis: "66%",
           opacity: 1,
-          xPercent: -50,
+          xPercent: -66,
           duration: 0.5,
         });
       }
-    }
+    },
   },
 };
 </script>
@@ -100,8 +106,15 @@ export default {
             Your business is all set up and now feel ready to expand your client
             list? You understand your ideal client and how your products can
             solve their problems?
+            Your business is all set up and now feel ready to expand your client
+            list? You understand your ideal client and how your products can
+            solve their problems?
           </p>
           <p class="cards-description">
+            Your solution is of high value and great quality, but you have a
+            hard time attracting the right audience? Wish to work with specific
+            clients but can't cut through the noise of a saturated market? Or
+            simply looking to advance your growth efforts?
             Your solution is of high value and great quality, but you have a
             hard time attracting the right audience? Wish to work with specific
             clients but can't cut through the noise of a saturated market? Or
@@ -127,8 +140,15 @@ export default {
             Your business is all set up and now feel ready to expand your client
             list? You understand your ideal client and how your products can
             solve their problems?
+            Your business is all set up and now feel ready to expand your client
+            list? You understand your ideal client and how your products can
+            solve their problems?
           </p>
           <p class="cards-description">
+            Your solution is of high value and great quality, but you have a
+            hard time attracting the right audience? Wish to work with specific
+            clients but can't cut through the noise of a saturated market? Or
+            simply looking to advance your growth efforts?
             Your solution is of high value and great quality, but you have a
             hard time attracting the right audience? Wish to work with specific
             clients but can't cut through the noise of a saturated market? Or
@@ -150,14 +170,14 @@ export default {
 <style scoped>
 .trusted-container {
   position: relative;
-  padding: 20px;
+  padding: 1.25rem;
   z-index: 15;
   background: var(--white-color);
 }
 
 .content-header {
   text-align: right;
-  margin-bottom: 50px;
+  margin-bottom: 3.1rem;
   border-top: 1px solid var(--red-color);
   border-bottom: 1px solid var(--red-color);
 }
@@ -165,15 +185,15 @@ export default {
 .main-title {
   color: var(--red-color);
   text-align: right;
-  font-size: 112px;
+  font-size: 7rem;
   font-weight: 400;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .tagline {
   color: var(--red-color);
   text-align: right;
-  font-size: 38px;
+  font-size: 2.4rem;
 }
 
 .content-body p {
@@ -193,18 +213,18 @@ export default {
   opacity: 0.5;
 }
 .card {
-  padding: 80px 40px 40px 40px;
+  padding: 5rem 6.5rem 2.5rem 2.5rem;
   flex: 1;
-  min-width: 75%;
+  min-width: 66%;
 }
 .card p {
   color: var(--white-color);
 }
 .cards-title {
   color: var(--white-color);
-  font-size: 60px;
+  font-size: 3.75rem;
   margin: 0;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 .flex {
   display: flex;
@@ -212,15 +232,15 @@ export default {
   justify-content: space-between;
 }
 .mt-100 {
-  margin-top: 100px;
+  margin-top: 6.25rem;
 }
 .btns {
-  width: 240px;
-  padding: 10px 20px;
+  width: 15rem;
+  padding: 0.75rem 1.25rem;
   color: var(--white-color);
   border: none;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 .btn-red {
   background-color: var(--red-color);

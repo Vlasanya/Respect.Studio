@@ -5,8 +5,6 @@ export default {
   methods: {
     handleLoaderUp() {
       gsap.to(".main-container", { y: -100, duration: 1.5 });
-      gsap.to(".lead-section", { y: -100, duration: 1.5 });
-      gsap.to(".trusted-container", { y: -100, duration: 1.5 });
     }
   }
 };
@@ -22,5 +20,5 @@ export default {
 </template>
 
 <style>
-/* Стилі специфічні для цієї сторінки */
+/*  */
 </style>

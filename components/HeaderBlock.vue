@@ -1,142 +1,143 @@
-<script >
+<script>
 import { gsap } from "gsap";
 
 // import SplitText from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 // gsap.registerPlugin(SplitText);
-import SplitText from './SplitText.vue';
-
+import SplitText from "./SplitText.vue";
 
 export default {
-    components: {
-    SplitText
+  components: {
+    SplitText,
   },
   data() {
     return {
-      title: 'Growing businesses by building relationships'
-    }
+      title: "Growing businesses by building relationships",
+    };
   },
-   props: {
-    handleLoaderUp: Function
+  props: {
+    handleLoaderUp: Function,
   },
   mounted() {
     const fullScreen = window.matchMedia("(min-width: 1366px)");
     if (fullScreen.matches) {
       gsap.to(".main-container", { y: 0 });
       this.handleLoaderUp;
-      
-        // const splitText = new SplitText(".title", { type: "chars" });
-       
-        // gsap.from(splitText.chars, {
-        //     duration: 1,
-        //     y: 100,
-        //     autoAlpha: 0,
-        //     stagger: 0.05
-        //     });
-      
-       
-         const tl = gsap.timeline({
+
+      // const splitText = new SplitText(".title", { type: "chars" });
+
+      // gsap.from(splitText.chars, {
+      //     duration: 1,
+      //     y: 100,
+      //     autoAlpha: 0,
+      //     stagger: 0.05
+      //     });
+
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".hero",
+          trigger: ".header",
           start: "0 100%",
           end: "+=100%",
-          scrub: true, 
+          scrub: true,
           onLeave: () => tl.pause(),
-        }
+        },
       });
 
-      tl.from('.title__hero span', {
+      tl.from(".title__header span", {
         opacity: 0,
         stagger: 0.1,
-        duration: 1
+        duration: 1,
       });
-     
-    
     }
   },
 };
 </script>
 
 <template>
-  <div class="main-container">
-    <nav class="navigation">
-      <div class="logo">
-        <img src="../public/logo.svg" alt="Logo" />
-      </div>
-      <ul class="nav-links">
-        <li><a href="/services">Services</a></li>
-        <li><a href="/case-studies">Case Studies</a></li>
-        <li><a href="/blog">Blog</a></li>
-      </ul>
-      <ul>
-        <li><a href="/careers">We're hiring</a></li>
-        <li><a href="/contact">Contacts</a></li>
-      </ul>
-      <button class="book-call">
-        <img src="../public/arrow-right.svg" alt="Arrow" />
-        Book a call
-      </button>
-    </nav>
+  <section>
+    <div class="main-container">
+      <nav class="navigation">
+        <div class="logo">
+          <img src="../public/logo.svg" alt="Logo" />
+        </div>
+        <ul class="nav-links">
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+        <ul>
+          <li><a href="#">We're hiring</a></li>
+          <li><a href="#">Contacts</a></li>
+        </ul>
+        <button class="btn">
+          <img src="../public/arrow-right.svg" alt="Arrow" />
+          Book a call
+        </button>
+      </nav>
 
-    <div class="hero" ref="hero">
-      <h1 class="title__hero">
-        <split-text :text="title"></split-text>
-      </h1>
-      <p class="subtitle">
-        B2B Marketing & LinkedIn Lead <br />
-        Generation agency
-      </p>
+      <div class="header" ref="header">
+        <h1 class="title__header">
+          <split-text :text="title"></split-text>
+        </h1>
+        <p class="subtitle">
+          B2B Marketing & LinkedIn Lead <br />
+          Generation agency
+        </p>
+      </div>
     </div>
-  </div>
+    <div class="empty-block"></div>
+  </section>
 </template>
 
 <style scoped>
+section {
+  position: relative;
+}
 .main-container {
   display: flex;
   flex-direction: column;
   background-color: var(--red-color);
   color: var(--dark-color);
   height: 100vh;
-  padding: 20px;
-  z-index: 15;
+  padding: 1.25rem;
 }
 
 .navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 20px;
+  padding-bottom: 1.25rem;
 }
 
 ul {
   list-style-type: none;
   display: flex;
-  gap: 80px;
+  gap: 5rem;
 }
 
 li a {
   text-decoration: none;
   color: var(--dark-color);
-  font-size: 22px;
+  font-size: 1.4rem;
   line-height: 1.1;
 }
 
-.book-call {
-  padding: 10px 20px;
+.btn {
+  padding: 0.75rem 1.25rem;
+  padding-left: 9rem;
   border: none;
   cursor: pointer;
   background-color: var(--dark-color);
   color: var(--red-color);
-  width: 330px;
+  width: 21rem;
   display: flex;
-  gap: 50px;
-  height: 44px;
+  gap: 3.1rem;
+  height: 2.75rem;
   align-items: center;
-  justify-content: flex-end;
 }
 
-.hero {
+.header {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -144,19 +145,26 @@ li a {
   align-items: flex-end;
 }
 
-.title__hero {
-  font-size: 135px;
+.title__header {
+  font-size: 8.5rem;
   text-align: right;
-  width: 800px;
+  width: 50rem;
   line-height: 1.1;
   font-weight: 400;
 }
 
 .subtitle {
-  font-size: 22px;
+  font-size: 1.4rem;
   width: 100%;
   text-align: left;
   font-weight: 400;
   line-height: 1.2;
+}
+.empty-block {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 6.25rem;
+  background-color: var(--red-color);
 }
 </style>

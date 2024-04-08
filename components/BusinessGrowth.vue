@@ -39,50 +39,64 @@ export default {
   mounted() {
     const fullScreen = window.matchMedia("(min-width: 1366px)");
     if (fullScreen.matches) {
+      const fullScreen = window.matchMedia("(min-width: 1366px)");
+    if (fullScreen.matches) {
+      document.documentElement.style.setProperty('--number-of-bars', this.barValues.length.toString());
+      this.setupAnimations();
+    }
+
+    }
+  },
+  methods: {
+    setupAnimations() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ".lead-section",
           start: "0 50%",
         },
       });
-      tl.from(".title span", {
+
+      tl.from(".title span", { opacity: 0, stagger: 0.05, duration: 1 })
+        .from(".description span", { opacity: 0, stagger: 0.01, duration: 1 })
+        .add( this.animateBlocks())
+
+      gsap.from(".stats-block", {
+        scrollTrigger: {
+          trigger: ".stats-block",
+          start: "0 70%",
+        },
         opacity: 0,
         stagger: 0.05,
         duration: 1,
+        xPercent: -100,
       });
-      tl.from(".description span", {
-        opacity: 0,
-        stagger: 0.05,
-        duration: 1,
+    },
+    animateBlocks() {
+      this.barValues.forEach((value) => {
+        const selector = `#block-${value.label}`;
+        const element = document.querySelector(selector);
+        if (element) {
+          gsap.fromTo(selector, {
+            height: '0%',
+          },{
+            height: `${value.label}%`,
+            duration: 2,
+            ease: "power1.out",
+             scrollTrigger: {
+              trigger: selector,
+              start: "top bottom"
+        }
+          });
+        } else {
+          console.log("Element not found:", selector);
+        }
       });
-      tl.from(
-        ".bar",
-        {
-          opacity: 0,
-          stagger: 0.05,
-          duration: 1,
-          yPercent: 100,
-        },
-        "<"
-      );
-      gsap.from(
-        ".stats-block",
-        {
-          scrollTrigger: {
-            trigger: '.stats-block',
-            start: "0 70%",
-          },
-          opacity: 0,
-          stagger: 0.05,
-          duration: 1,
-          xPercent: -100,
-        },
-        "<"
-      );
-    }
-  },
-};
+    },
+  }
+}
+
 </script>
+
 
 <template>
   <section class="lead-section">
@@ -102,6 +116,7 @@ export default {
           class="bar"
           v-for="value in barValues"
           :key="value"
+          :id="`block-${value.label}`"
           :style="{ height: value.label + '%' }"
         >
           <div class="bar-value">{{ value.label }}</div>
@@ -128,7 +143,7 @@ export default {
 <style scoped>
 .lead-section {
   color:  var(--dark-color);
-  padding: 20px;
+  padding: 1.25rem;
   overflow: hidden;
   background-color: var(--white-color);
   position: relative;
@@ -136,37 +151,38 @@ export default {
 }
 
 .title {
-  font-size: 82px;
-  margin-bottom: 16px;
+  font-size: 5rem;
+  margin-bottom: 1rem;
   font-weight: 400;
 }
 
 .description {
-  font-size: 22px;
-  margin-bottom: 100px;
+  font-size: 1.4rem;
+  margin-bottom: 6.25rem;
 }
 
 .bars {
-  display: flex;
+   display: flex;
+  position: relative;
   align-items: flex-end;
-  justify-content: space-between;
-  height: 200px;
-  margin-bottom: 32px;
-  gap: 4px;
+  height: 12.5rem;
+  margin-bottom: 2rem;
+  gap: 0.25rem;
 }
 
 .bar {
-  width: 100%;
+  width: calc(100% / var(--number-of-bars)); 
   background-color: var(--red-color);
   text-align: center;
+  height: 0%;
   position: relative;
 }
 .bar-value {
   position: absolute;
-  top: -20px;
+  top: -1.25rem;
   left: 45%;
   color: var(--red-color);
-  font-size: 15px;
+  font-size: 1rem;
   line-height: 1.1;
 }
 .statistics {
@@ -179,24 +195,24 @@ export default {
 
 .stats-block {
   background-color: var(--dark-color);
-  padding: 16px;
+  padding: 1rem;
   color: var(--white-color);
   min-width: 30%;
   display: flex;
-  gap: 20px;
+  gap: 1.25rem;
   align-items: center;
-  padding-left: 170px;
+  padding-left: 11rem;
 }
 
 .stats-label {
-  font-size: 22px;
+  font-size: 1.4rem;
   color: var(--red-color);
-  max-width: 200px;
+  max-width: 12.5rem;
   text-align: right;
 }
 
 .stats-value {
-  font-size: 50px;
+  font-size: 3.1rem;
   font-weight: bold;
   color: var(--red-color);
 }
