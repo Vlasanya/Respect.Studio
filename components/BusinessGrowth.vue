@@ -1,9 +1,10 @@
 <script>
+import { gsap } from "gsap";
+import SplitText from "./SplitText.vue";
 
-import SplitText from './SplitText.vue';
 export default {
-    components: {
-    SplitText
+  components: {
+    SplitText,
   },
   data() {
     return {
@@ -29,14 +30,59 @@ export default {
         { label: "Leads generated", value: "378" },
         { label: "Calls scheduled for clients", value: "197" },
       ],
-      title1: 'Consistent leads flow to streamline',
-      title2: 'Your business growth.',
-
+      title1: "Consistent leads flow to streamline",
+      title2: "Your business growth.",
+      description1: "We combine disruptive marketing techniques with proven",
+      description2: "tech solutions to provide maximum business value.",
     };
+  },
+  mounted() {
+    const fullScreen = window.matchMedia("(min-width: 1366px)");
+    if (fullScreen.matches) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".lead-section",
+          start: "0 50%",
+        },
+      });
+      tl.from(".title span", {
+        opacity: 0,
+        stagger: 0.05,
+        duration: 1,
+      });
+      tl.from(".description span", {
+        opacity: 0,
+        stagger: 0.05,
+        duration: 1,
+      });
+      tl.from(
+        ".bar",
+        {
+          opacity: 0,
+          stagger: 0.05,
+          duration: 1,
+          yPercent: 100,
+        },
+        "<"
+      );
+      tl.from(
+        ".stats-block",
+        {
+          // scrollTrigger: {
+          //   trigger: ".stats-block",
+          //   start: "0 80%",
+          // },
+          opacity: 0,
+          stagger: 0.05,
+          duration: 1,
+          xPercent: -100,
+        },
+        "<"
+      );
+    }
   },
 };
 </script>
-
 
 <template>
   <section class="lead-section">
@@ -47,8 +93,9 @@ export default {
         <split-text :text="title2"></split-text>
       </h2>
       <p class="description">
-        We combine disruptive marketing techniques with proven <br />tech
-        solutions to provide maximum business value.
+        <split-text :text="description1"></split-text>
+        <br />
+        <split-text :text="description2"></split-text>
       </p>
       <div class="bars">
         <div
@@ -61,7 +108,15 @@ export default {
         </div>
       </div>
       <div class="statistics">
-        <div class="stats-block" v-for="stat in statsData" :key="stat.label" :style="{ width: stat.value % 100 + '%', paddingLeft: stat.value % 30 + '%' }">
+        <div
+          class="stats-block"
+          v-for="stat in statsData"
+          :key="stat.label"
+          :style="{
+            width: (stat.value % 100) + '%',
+            paddingLeft: (stat.value % 30) + '%',
+          }"
+        >
           <div class="stats-label">{{ stat.label }}</div>
           <div class="stats-value">{{ stat.value }}</div>
         </div>
@@ -69,7 +124,6 @@ export default {
     </div>
   </section>
 </template>
-
 
 <style scoped>
 .lead-section {
@@ -96,7 +150,7 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 200px; 
+  height: 200px;
   margin-bottom: 32px;
   gap: 4px;
 }
@@ -111,10 +165,9 @@ export default {
   position: absolute;
   top: -20px;
   left: 45%;
-  color: #E63E3A;
+  color: #e63e3a;
   font-size: 15px;
   line-height: 1.1;
-;
 }
 .statistics {
   display: flex;
@@ -137,14 +190,14 @@ export default {
 
 .stats-label {
   font-size: 22px;
-   color: #E63E3A;
-   max-width: 200px;
-   text-align: right;
+  color: #e63e3a;
+  max-width: 200px;
+  text-align: right;
 }
 
 .stats-value {
   font-size: 50px;
   font-weight: bold;
-   color: #E63E3A;
+  color: #e63e3a;
 }
 </style>

@@ -1,12 +1,12 @@
-<script>
+<script >
 import { gsap } from "gsap";
-import { eventBus } from "/main.js";
 
 // import SplitText from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 // gsap.registerPlugin(SplitText);
 import SplitText from './SplitText.vue';
+
 
 export default {
     components: {
@@ -15,15 +15,17 @@ export default {
   data() {
     return {
       title: 'Growing businesses by building relationships'
-    };
+    }
+  },
+   props: {
+    handleLoaderUp: Function
   },
   mounted() {
     const fullScreen = window.matchMedia("(min-width: 1366px)");
     if (fullScreen.matches) {
-      this.$nextTick(() => {
-        eventBus.on("loader-up", () => {
-          gsap.to(".main-container", { y: -100, duration: 1.5 });
-        });
+      gsap.to(".main-container", { y: 0 });
+      this.handleLoaderUp;
+      
         // const splitText = new SplitText(".title", { type: "chars" });
        
         // gsap.from(splitText.chars, {
@@ -32,26 +34,25 @@ export default {
         //     autoAlpha: 0,
         //     stagger: 0.05
         //     });
-        gsap.to('.main-container',{
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "0 bottom",
-            },
-            duration: 1,
-            autoAlpha: 1,
-            ease: "back.out(1.7)"
-        })         
-        gsap.from('.title span', {
-            scrollTrigger: {
-                trigger: ".title",
-                start: "100 bottom",
-            },
-            duration: 1,
-            y: 100,
-            autoAlpha: 0,
-            stagger: 0.05
-            }, "+=0.5");
+      
+       
+         const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "0 100%",
+          end: "+=100%",
+          scrub: true, 
+          onLeave: () => tl.pause(),
+        }
       });
+
+      tl.from('.title__hero span', {
+        opacity: 0,
+        stagger: 0.1,
+        duration: 1
+      });
+     
+    
     }
   },
 };
@@ -78,8 +79,8 @@ export default {
       </button>
     </nav>
 
-    <div class="hero">
-      <h1 class="title">
+    <div class="hero" ref="hero">
+      <h1 class="title__hero">
         <split-text :text="title"></split-text>
       </h1>
       <p class="subtitle">
@@ -143,7 +144,7 @@ li a {
   align-items: flex-end;
 }
 
-.title {
+.title__hero {
   font-size: 135px;
   text-align: right;
   width: 800px;

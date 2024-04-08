@@ -1,67 +1,53 @@
-<script>
+<script setup>
 import { gsap } from "gsap";
-import { eventBus } from '/main.js';
+import { onMounted, ref } from "vue";
+import { defineEmits } from 'vue';
 
-export default {
-  name: "LoaderComponent",
-  data() {
-    return {
-      miliseconds: 0,
-      randomNumbers: [],
-      currentNumber: 0,
-    };
-  },
-  created() {
-    this.randomNumbers = Array.from({ length: 7 }, () =>
+const emits = defineEmits(['loader-up']);
+
+const randomNumbers = ref([]);
+const currentNumber = ref(0);
+
+onMounted(() => {
+  const fullScreen = window.matchMedia("(min-width: 1366px)");
+  if (fullScreen.matches) {
+    randomNumbers.value = Array.from({ length: 7 }, () =>
       Math.floor(Math.random() * 100)
     ).sort((a, b) => a - b);
-    this.randomNumbers.push(100);
-  },
-  mounted() {
-    const fullScreen = window.matchMedia("(min-width: 1366px)");
-    if (fullScreen.matches) {
-      this.$nextTick(() => {
-        this.animateNumbers();
-        const tl = gsap.timeline({ delay: 1.3 });
-        tl.from(".group-94", { autoAlpha: 0 })
-          .from(".cls-1", { autoAlpha: 0 }, "<")
-          .from(".cls-2", { autoAlpha: 0, stagger: 0.2 }, "+=0.2")
-          .from(".cls-3", { autoAlpha: 0, stagger: 0.2 }, "<")
-          .to(".loader", { yPercent: -100, duration: 1.5, delay: 1, onStart: () => {
-                eventBus.emit('loader-up');
-                }
-            }, "<")
-        const tlPhotos = gsap.timeline({ delay: 3 });
-        tlPhotos
-          .from(".fotos__items", {
-            autoAlpha: 0,
-            stagger: 1.5,
-            duration: 1.5,
-            ease: "back.out(1.7)",
-          })
-          .from(".preloader__text", { autoAlpha: 0, duration: 3 }, "<");
-      });
-    }
-  },
-  methods: {
-    animateNumbers() {
-      this.randomNumbers.forEach((num, index) => {
-        setTimeout(() => {
-          gsap.set(this.$refs.loaderNumber, { textContent: num });
-          if (num === 100) {
-            this.hideLoader();
-          }
-        }, index * (1000 / (this.randomNumbers.length - 1)));
-      });
-    },
-    hideLoader() {
-      gsap.to(".loader__number", {
-        autoAlpha: 0,
-        duration: 1,
-      });
-    },
-  },
-};
+    randomNumbers.value.push(100);
+    animateNumbers();
+    animateLogo();
+    gsap.to(".loader", { yPercent: -110, duration: 1.5, delay: 2, onStart: () => {
+                emits('loader-up')}}, "<");
+    gsap.from(".fotos__item", { autoAlpha: 0, stagger: 1 }, "-=1.5");
+  }
+});
+
+function animateLogo() {
+  const logo = document.querySelector(".logo");
+  if (logo) {
+    logo.style.zIndex = 15;
+  }
+  const tl = gsap.timeline({ delay: 1.3 });
+  tl.from(".group-94", { autoAlpha: 0 })
+    .from(".cls-1", { autoAlpha: 0 }, "<")
+    .from(".cls-2", { autoAlpha: 0, stagger: 0.2 }, "+=0.2")
+    .from(".cls-3", { autoAlpha: 0, stagger: 0.2 }, "<");
+}
+
+function animateNumbers() {
+  randomNumbers.value.forEach((num, index) => {
+    setTimeout(() => {
+      currentNumber.value = num;
+      if (num === 100) {
+        hideLoaderNumbers();
+      }
+    }, index * (1000 / randomNumbers.value.length));
+  });
+}
+function hideLoaderNumbers() {
+  gsap.to(".loader__number", { autoAlpha: 0, duration: 1 });
+}
 </script>
 
 <template>
@@ -172,9 +158,11 @@ export default {
     </svg>
     <div class="fotos">
       <p class="preloader__text">Digital Marketing Agency</p>
-      <div class="fotos__items item2"></div>
-      <div class="fotos__items item4"></div>
-      <div class="fotos__items item5"></div>
+      <div class="fotos-items">
+        <div class="fotos__item" id="item2"></div>
+        <div class="fotos__item" id="item4"></div>
+        <div class="fotos__item" id="item5"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -191,7 +179,7 @@ export default {
   width: 100vw;
   height: 100vh;
   background: #101820;
-  z-index: 5;
+  z-index: 15;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
 }
 .loader__number {
@@ -235,25 +223,34 @@ export default {
   object-fit: cover;
 } */
 .fotos {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 100vh;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
 }
-.fotos__items {
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.fotos-items {
+  width: 100vw;
+  height: 100vh;
+ 
+  position: relative;
 }
-.item2 {
-    background-image: url("../public/bg_loader/02photo.png");
+.fotos__item {
+  width: 100%;
+  height: 100%;
+   position: absolute;
+  top: 0;
+  left: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-.item4 {
-    background-image: url("../public/bg_loader/04photo.png");
+#item2 {
+  background-image: url("../public/bg_loader/02photo.png");
 }
-.item5 {
-    background-image: url("../public/bg_loader/05photo.png");
+#item4 {
+  background-image: url("../public/bg_loader/04photo.png");
+}
+#item5 {
+  background-image: url("../public/bg_loader/05photo.png");
 }
 </style>
