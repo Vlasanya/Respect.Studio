@@ -1,13 +1,21 @@
 <script setup>
 import { gsap } from "gsap";
 import { onMounted, ref } from "vue";
-import { defineEmits } from 'vue';
+import { defineEmits } from "vue";
 
-const emits = defineEmits(['loader-up']);
+const emits = defineEmits(["loader-up"]);
 
 const randomNumbers = ref([]);
 const currentNumber = ref(0);
-
+// onBeforeMount(() => {
+//   const fullScreen = window.matchMedia("(min-width: 1366px)");
+//   if (fullScreen.matches) {
+//     randomNumbers.value = Array.from({ length: 7 }, () =>
+//       Math.floor(Math.random() * 100)
+//     ).sort((a, b) => a - b);
+//     randomNumbers.value.push(100);
+//   }
+// });
 onMounted(() => {
   const fullScreen = window.matchMedia("(min-width: 1366px)");
   if (fullScreen.matches) {
@@ -17,8 +25,18 @@ onMounted(() => {
     randomNumbers.value.push(100);
     animateNumbers();
     animateLogo();
-    gsap.to(".loader", { yPercent: -110, duration: 1.5, delay: 2, onStart: () => {
-                emits('loader-up')}}, "<");
+    gsap.to(
+      ".loader",
+      {
+        yPercent: -110,
+        duration: 1.5,
+        delay: 2,
+        onStart: () => {
+          emits("loader-up");
+        },
+      },
+      "<"
+    );
     gsap.from(".fotos__item", { autoAlpha: 0, stagger: 1 }, "-=1.5");
   }
 });
@@ -178,13 +196,13 @@ function hideLoaderNumbers() {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: #101820;
+  background: var(--dark-color);
   z-index: 15;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
 }
 .loader__number {
   position: absolute;
-  color: #e63e3a;
+  color: var(--red-color);
   font-size: 230px;
   bottom: 60px;
   right: 20px;
@@ -192,7 +210,7 @@ function hideLoaderNumbers() {
 }
 .preloader__text {
   position: absolute;
-  color: #e63e3a;
+  color: var(--red-color);
   top: 20px;
   right: 40px;
   width: 140px;
@@ -208,20 +226,6 @@ function hideLoaderNumbers() {
   left: 20px;
   z-index: 10;
 }
-/* .fotos {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fotos__items {
-  position: sticky;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-} */
 .fotos {
   position: sticky;
   top: 0;
@@ -231,13 +235,13 @@ function hideLoaderNumbers() {
 .fotos-items {
   width: 100vw;
   height: 100vh;
- 
+
   position: relative;
 }
 .fotos__item {
   width: 100%;
   height: 100%;
-   position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   background-position: center;

@@ -1,82 +1,82 @@
 <script>
 import { gsap } from "gsap";
 
+import SplitText from "./SplitText.vue";
+
 export default {
+  components: {
+    SplitText,
+  },
   data() {
     return {
-      activeCard: 'marketing-section', // Set default active card
+      activeCard: "marketing-section",
+      title: "Trusted long-term partner",
+      text: ' We combine disruptive marketing techniques with proven tech solutions to provide maximum business value.'
     };
   },
   mounted() {
-    // Trigger the animation for the default active card on mount
-    this.toggleCard(null, this.activeCard);
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".trusted-container",
+        start: "50% 100%",
+        end: "+=100%",
+      },
+    });
+
+    tl.from(".main-title span", {
+      opacity: 0,
+      stagger: 0.1,
+      duration: 1,
+    })
+    .from('.text span', {
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.01
+    })
   },
   methods: {
-    toggleCard(event, cardIdentifier) {
-      let clickedCard;
-      
-      if (event) {
-        clickedCard = event.currentTarget;
-      } else {
-        // If no event is provided (e.g., on mount), find the default active card
-        clickedCard = this.$el.querySelector(`.${cardIdentifier}`);
+    toggleCard(cardName) {
+      if (this.activeCard === cardName) {
+        return; 
       }
+      this.activeCard = cardName;
+      this.applyCardStyles();
+      console.log(this.activeCard === "marketing-section");
+    },
+    applyCardStyles() {
+      const marketing = this.$refs.marketing;
+      const generation = this.$refs.generation;
 
-      if (this.activeCard === clickedCard) {
-        this.resetCards();
-        this.activeCard = null;
-      } else {
-        if (this.activeCard) {
-          this.resetCards();
-        }
-
-        this.activeCard = clickedCard;
-
-        const otherCard = clickedCard.classList.contains("marketing-section")
-          ? this.$el.querySelector(".generation-section")
-          : this.$el.querySelector(".marketing-section");
-
-        // Animate the clicked card
-        gsap.to(clickedCard, {
-          xPercent: clickedCard.classList.contains("marketing-section")
-            ? 10
-            : -10,
-          width: "75%",
-          opacity: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        });
-
-        // Dim the non-clicked card
-        gsap.to(otherCard, {
+      if (this.activeCard === "marketing-section") {
+        const tl = gsap.timeline();
+        tl
+        .to(generation, {
+          flexBasis: "25%",
           opacity: 0.5,
+          xPercent: 0,
           duration: 0.5,
-          ease: "power1.out",
+        })
+        .to(marketing, { opacity: 1, duration: 0.2 })
+      } else {
+        gsap.to(marketing, { opacity: 0.5, duration: 0.5 });
+        gsap.to(generation, {
+          flexBasis: "75%",
+          opacity: 1,
+          xPercent: -50,
+          duration: 0.5,
         });
       }
-    },
-    isActive(card) {
-    return this.activeCard === card;
-  },
-    resetCards() {
-      const cards = this.$el.querySelectorAll(".card");
-      gsap.to(cards, {
-        xPercent: 0,
-        width: "50%",
-        opacity: 1,
-        duration: 0.5,
-        ease: "power1.out",
-      });
-    },
+    }
   },
 };
 </script>
 
-
 <template>
   <section class="trusted-container">
     <div class="content-header">
-      <h2 class="main-title">Trusted long-term partner</h2>
+      <h2 class="main-title">
+        <split-text :text="title"></split-text>
+      </h2>
       <p class="tagline">
         For leading B2B tech and
         <br />
@@ -84,13 +84,16 @@ export default {
       </p>
     </div>
     <div class="content-body">
-      <p>
-        We combine disruptive marketing techniques with proven tech solutions to
-        provide maximum business value.
+      <p class="text">
+        <split-text :text="text"></split-text>
       </p>
       <div class="cards">
-        <div class="marketing-section card" @click="toggleCard" 
-        :class="{ 'active': activeCard === 'marketing-section' }">
+        <div
+          ref="marketing"
+          class="marketing-section card"
+          @click="toggleCard('marketing-section')"
+          :class="{ active: activeCard === 'marketing-section' }"
+        >
           <p>1</p>
           <h3 class="cards-title">B2B Marketing</h3>
           <p class="cards-description">
@@ -112,8 +115,12 @@ export default {
             </button>
           </div>
         </div>
-        <div class="generation-section card" @click="toggleCard" 
-        :class="{ 'active': activeCard === 'generation-section' }">
+        <div
+          ref="generation"
+          class="generation-section card"
+          @click="toggleCard('generation-section')"
+          :class="{ active: activeCard === 'generation-section' }"
+        >
           <p>2</p>
           <h2 class="cards-title">LinkedIn Lead Generation</h2>
           <p class="cards-description">
@@ -145,18 +152,18 @@ export default {
   position: relative;
   padding: 20px;
   z-index: 15;
-  background: #fff;
+  background: var(--white-color);
 }
 
 .content-header {
   text-align: right;
   margin-bottom: 50px;
-  border-top: 1px solid #e63e3a;
-  border-bottom: 1px solid #e63e3a;
+  border-top: 1px solid var(--red-color);
+  border-bottom: 1px solid var(--red-color);
 }
 
 .main-title {
-  color: #e63e3a;
+  color: var(--red-color);
   text-align: right;
   font-size: 112px;
   font-weight: 400;
@@ -164,13 +171,13 @@ export default {
 }
 
 .tagline {
-  color: #e63e3a;
+  color: var(--red-color);
   text-align: right;
   font-size: 38px;
 }
 
 .content-body p {
-  color: #e63e3a;
+  color: var(--red-color);
 }
 .cards {
   display: flex;
@@ -179,10 +186,11 @@ export default {
   overflow: hidden;
 }
 .marketing-section {
-  background-color: #e63e3a;
+  background-color: var(--red-color);
 }
 .generation-section {
-  background-color: #101820;
+  background-color: var(--dark-color);
+  opacity: 0.5;
 }
 .card {
   padding: 80px 40px 40px 40px;
@@ -190,10 +198,10 @@ export default {
   min-width: 75%;
 }
 .card p {
-  color: #fff;
+  color: var(--white-color);
 }
 .cards-title {
-  color: #fff;
+  color: var(--white-color);
   font-size: 60px;
   margin: 0;
   margin-bottom: 30px;
@@ -209,23 +217,18 @@ export default {
 .btns {
   width: 240px;
   padding: 10px 20px;
-  color: #fff;
+  color: var(--white-color);
   border: none;
   cursor: pointer;
   margin-top: 20px;
 }
 .btn-red {
-  background-color: #e63e3a;
+  background-color: var(--red-color);
 }
 .btn-black {
-  background-color: #101820;
-}
-.marketing-section,
-.generation-section {
-  flex-basis: 50%; /* Adjust to 50% */
-  transition: flex-basis 0.5s ease-out, opacity 0.5s ease-out;
+  background-color: var(--dark-color);
 }
 .active {
-    z-index: 15;
-  }
+  z-index: 15;
+}
 </style>

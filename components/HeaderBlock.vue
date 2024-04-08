@@ -95,8 +95,8 @@ export default {
 .main-container {
   display: flex;
   flex-direction: column;
-  background-color: #e63e3a;
-  color: #101820;
+  background-color: var(--red-color);
+  color: var(--dark-color);
   height: 100vh;
   padding: 20px;
   z-index: 15;
@@ -117,7 +117,7 @@ ul {
 
 li a {
   text-decoration: none;
-  color: #101820;
+  color: var(--dark-color);
   font-size: 22px;
   line-height: 1.1;
 }
@@ -126,8 +126,8 @@ li a {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  background-color: #101820;
-  color: #e63e3a;
+  background-color: var(--dark-color);
+  color: var(--red-color);
   width: 330px;
   display: flex;
   gap: 50px;

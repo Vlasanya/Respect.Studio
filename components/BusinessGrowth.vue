@@ -65,13 +65,13 @@ export default {
         },
         "<"
       );
-      tl.from(
+      gsap.from(
         ".stats-block",
         {
-          // scrollTrigger: {
-          //   trigger: ".stats-block",
-          //   start: "0 80%",
-          // },
+          scrollTrigger: {
+            trigger: '.stats-block',
+            start: "0 70%",
+          },
           opacity: 0,
           stagger: 0.05,
           duration: 1,
@@ -127,10 +127,10 @@ export default {
 
 <style scoped>
 .lead-section {
-  color: #101820;
+  color:  var(--dark-color);
   padding: 20px;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--white-color);
   position: relative;
   z-index: 7;
 }
@@ -157,7 +157,7 @@ export default {
 
 .bar {
   width: 100%;
-  background-color: #e63e3a;
+  background-color: var(--red-color);
   text-align: center;
   position: relative;
 }
@@ -165,7 +165,7 @@ export default {
   position: absolute;
   top: -20px;
   left: 45%;
-  color: #e63e3a;
+  color: var(--red-color);
   font-size: 15px;
   line-height: 1.1;
 }
@@ -178,9 +178,9 @@ export default {
 }
 
 .stats-block {
-  background-color: #101820;
+  background-color: var(--dark-color);
   padding: 16px;
-  color: #fff;
+  color: var(--white-color);
   min-width: 30%;
   display: flex;
   gap: 20px;
@@ -190,7 +190,7 @@ export default {
 
 .stats-label {
   font-size: 22px;
-  color: #e63e3a;
+  color: var(--red-color);
   max-width: 200px;
   text-align: right;
 }
@@ -198,6 +198,6 @@ export default {
 .stats-value {
   font-size: 50px;
   font-weight: bold;
-  color: #e63e3a;
+  color: var(--red-color);
 }
 </style>
