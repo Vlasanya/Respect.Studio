@@ -99,7 +99,7 @@ section {
   flex-direction: column;
   background-color: var(--red-color);
   color: var(--dark-color);
-  height: 100vh;
+  height: 100%;
   padding: 1.25rem;
 }
 
@@ -164,7 +164,7 @@ li a {
   position: absolute;
   bottom: 0;
   width: 100vw;
-  height: 6.25rem;
+  height: 6.5rem;
   background-color: var(--red-color);
 }
 </style>
